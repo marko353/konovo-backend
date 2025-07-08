@@ -19,7 +19,7 @@ def get_products():
     result = filter_and_search(processed, category, search)
     return jsonify(result)
 
-@products_bp.route("/products/<int:product_id>", methods=["GET"])
+@products_bp.route("/products/<product_id>", methods=["GET"])
 def get_single_product(product_id):
     token = get_jwt_token()
     if not token:
@@ -27,8 +27,13 @@ def get_single_product(product_id):
 
     products = get_products_from_api(token)
     processed = process_products(products)
+    
+    print("Prikazani ID-jevi:", [p.get("id") for p in products])
+    print("Dostupni ID-jevi:", [p.get("id") for p in processed])
+    print("Traženi ID:", product_id)
 
-    product = next((p for p in processed if p["id"] == product_id), None)
+    # Poređenje kao stringovi, jer id može biti string
+    product = next((p for p in processed if str(p.get("id")) == product_id), None)
     if not product:
         return jsonify({"error": "Product not found"}), 404
 
