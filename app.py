@@ -10,12 +10,6 @@ CORS(app)  # Omogućava CORS za sve rute
 app.register_blueprint(auth_bp)
 app.register_blueprint(products_bp)
 
-
-@app.route("/")
-def index():
-    return "Backend is running 🚀", 200
-
-
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
